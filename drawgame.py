@@ -4,7 +4,6 @@ pygame.font.init()
 
 #ISSUES:
 #when pausing the square covers some text wherever it is
-#still moves at beginning (black but still moves and takes out controls text)
 #add boundaries
 
 window_w = 500
@@ -35,8 +34,8 @@ PINK = (255, 113, 181)
 color = BLACK
 
 #attributes of our drawing square:
-x=50
-y=50 
+x=30
+y=30 
 width = 50
 height = 50
 vel = 5
@@ -97,18 +96,28 @@ while run:
 			run = False
 		if keys[pygame.K_p]:
 			if start:
+				no_moving = True
 				window.fill(BLACK) 
 				pygame.display.update()
 				new_window = window.copy()
 				controls()
 				start = False
 			else:
+				color_before_pause = color
+				color = BLACK
+				paused_x = x
+				paused_y = y
+				x = window_w - (window_w*2)
+				y = window_h - (window_h*2)
 				new_window = window.copy()
 				controls()
 				no_moving = True
 			
 		if keys[pygame.K_c]:
+			color = color_before_pause
 			window.blit(new_window, (0,0))
+			x = paused_x
+			y = paused_y
 			no_moving = False
 
 		if keys[pygame.K_1] or keys[pygame.K_KP1]:
@@ -135,26 +144,26 @@ while run:
 
 
 
-	if keys[pygame.K_LEFT] and not no_moving:
+	if keys[pygame.K_LEFT] and not no_moving and x>vel:
 		x -= vel #if the left arrow key is pressed, move left
 		position = (x,y)
 		if dark_drawing:
 			pos.append(position)
 			popping = True
 				
-	if keys[pygame.K_RIGHT] and not no_moving:
+	if keys[pygame.K_RIGHT] and not no_moving and x < window_w-width-vel:
 		x += vel #if the right arrow key is pressed, move right
 		position = (x,y)
 		if dark_drawing:
 			pos.append(position)
 			popping = True
-	if keys[pygame.K_UP] and not no_moving:
+	if keys[pygame.K_UP] and not no_moving and y>vel:
 		y -= vel #if the up arrow key is pressed, move up
 		position = (x,y)
 		if dark_drawing:
 			pos.append(position)
 			popping = True
-	if keys[pygame.K_DOWN] and not no_moving:
+	if keys[pygame.K_DOWN] and not no_moving and y < window_h-height-vel:
 		y += vel #if the down arrow key is pressed, move down
 		position = (x,y)
 		if dark_drawing:
