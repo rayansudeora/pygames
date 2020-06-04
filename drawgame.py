@@ -4,8 +4,6 @@ pygame.font.init()
 
 #ISSUES:
 #when pausing the square covers some text wherever it is
-#can't move after 1
-#do u need redgame bluegame, etc.
 #still moves at beginning (black but still moves and takes out controls text)
 #add boundaries
 
@@ -13,12 +11,7 @@ window_w = 500
 window_h = 700
 window = pygame.display.set_mode((window_w, window_h))#<--  #defining parameters for screen
 
-redgame = False
-bluegame = False
-whitegame = False
-yellowgame = False
-maroongame = False
-greengame = False
+
 dark_drawing = False
 no_moving = False
 popping = False
