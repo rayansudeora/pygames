@@ -2,9 +2,7 @@ import pygame
 pygame.init()
 pygame.font.init()
 
-#ISSUES:
-#when pausing the square covers some text wherever it is
-#add boundaries
+
 
 window_w = 500
 window_h = 700
@@ -14,6 +12,7 @@ window = pygame.display.set_mode((window_w, window_h))#<--  #defining parameters
 dark_drawing = False
 no_moving = False
 popping = False
+first_pause = False
 
 
 pygame.display.set_caption("Draw!")
@@ -70,19 +69,19 @@ def pause():
 
 font = pygame.font.SysFont('Arial', 30, bold=False, italic=False)
 def controls():
-	message("CONTROLS: ", PINK, 250, 150)
+	message("CONTROLS: ", PINK, window_w/2, window_h-550)
 	pygame.display.update()
-	message("ARROW KEYS TO MOVE", GOLD, 250, 200)
-	message("'p' TO PAUSE, 'c' TO CONTINUE", GOLD, 250, 250)
-	message("SPACE BAR TO ERASE/MOVE WITHOUT DRAWING", GOLD, 250, 300)
-	message("'r' FOR COLOR RED", GOLD, 250, 350)
-	message("'b' FOR COLOR BLUE", GOLD, 250, 400)
-	message("'w' FOR COLOR WHITE", GOLD, 250, 450)
-	message("'y' FOR COLOR YELLOW", GOLD, 250, 500)
-	message("'m' FOR COLOR MAROON", GOLD, 250, 550)
-	message("'g' FOR COLOR GREEN", GOLD, 250, 600)
-	message("'i' FOR COLOR INDIGO", GOLD, 250, 650)
-	message("PRESS '1' TO START OR CLEAR", GOLD, 250, 100)
+	message("ARROW KEYS TO MOVE", GOLD, window_w/2, window_h-500)
+	message("'p' TO PAUSE, 'c' TO CONTINUE/UNDO", GOLD, window_w/2, window_h-450)
+	message("SPACE BAR TO ERASE/MOVE WITHOUT DRAWING", GOLD, window_w/2, window_h-400)
+	message("'r' FOR COLOR RED", GOLD, window_w/2, window_h-350)
+	message("'b' FOR COLOR BLUE", GOLD, window_w/2, window_h-300)
+	message("'w' FOR COLOR WHITE", GOLD, window_w/2, window_h-250)
+	message("'y' FOR COLOR YELLOW", GOLD, window_w/2, window_h-200)
+	message("'m' FOR COLOR MAROON", GOLD, window_w/2, window_h-150)
+	message("'g' FOR COLOR GREEN", GOLD, window_w/2, window_h-100)
+	message("'i' FOR COLOR INDIGO", GOLD, window_w/2, window_h-50)
+	message("PRESS '1' TO START OR CLEAR", GOLD, window_w/2, window_h-600)
 		
 
 start = True
@@ -94,8 +93,10 @@ while run:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
+	
 		if keys[pygame.K_p]:
 			if start:
+				first_pause = True
 				no_moving = True
 				window.fill(BLACK) 
 				pygame.display.update()
@@ -103,6 +104,7 @@ while run:
 				controls()
 				start = False
 			else:
+				no_moving = True
 				color_before_pause = color
 				color = BLACK
 				paused_x = x
@@ -111,8 +113,8 @@ while run:
 				y = window_h - (window_h*2)
 				new_window = window.copy()
 				controls()
-				no_moving = True
-			
+					
+				
 		if keys[pygame.K_c]:
 			color = color_before_pause
 			window.blit(new_window, (0,0))
@@ -121,23 +123,24 @@ while run:
 			no_moving = False
 
 		if keys[pygame.K_1] or keys[pygame.K_KP1]:
+			color_before_pause = color
 			window.fill(BLACK)
 			pygame.display.update()
+			x = 30
+			y = 30
 			no_moving = False
+			if first_pause:
+				first_pause = False
+			else:
+				color = color_before_pause
+			
 
-
-
-
-
-
-		
 
 
 	#if keys[pygame.K_p]:
 	#	pause() #if user presses p, run the pause function
 	if keys[pygame.K_SPACE]:
 		dark_drawing = True
-		position = (x,y)
 		pos = []
 		pos.append(position)
 		color = DARK
@@ -233,7 +236,9 @@ while run:
 					popping = False
 			color = INDIGO #if user presses 'i', make the drawing color indigo
 
-	pygame.draw.rect(window, color, (x, y, width, height)) #make drawing color red
+
+	
+	pygame.draw.rect(window, color, (x, y, width, height))
 	pygame.display.update()
 
 
